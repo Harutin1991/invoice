@@ -44,7 +44,7 @@ class InvoiceController extends Controller
             $page = $request->get('page') ? $request->get('page') : $this->page;
             $skip = (!$page) ? 0 : ($page - 1) * $limit;
 
-            $invoiceItems = Invoice::with('paymentStatus','paymentType','invoiceType','invoiceStatus')
+            $invoiceItems = Invoice::with('paymentStatus','paymentType','invoiceType','invoiceStatus','lineItem')
                 ->where('invoice.school_year_id',self::$currentYearId)
                 ->join('school', 'school.id', '=', 'invoice.school_id')
                 ->select('invoice.*','school.name as schoolName')
@@ -69,7 +69,7 @@ class InvoiceController extends Controller
         $invoiceResponse = [];
         try {
 
-            $invoiceItems = Invoice::with('paymentStatus', 'paymentType', 'invoiceType', 'invoiceStatus')
+            $invoiceItems = Invoice::with('paymentStatus', 'paymentType', 'invoiceType', 'invoiceStatus','lineItem')
                 ->where('invoice.id', $id)
                 ->join('school', 'school.id', '=', 'invoice.school_id')
                 ->select('invoice.*', 'school.name as schoolName')

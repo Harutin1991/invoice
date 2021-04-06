@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Budget extends Model
 {
     protected $table = 'budget_item';
-    public $timestamps = false;
 
     public static $allocationTypes = [
         'title1' => 1,

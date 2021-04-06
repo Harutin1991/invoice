@@ -28,6 +28,14 @@ class Invoice extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+    public function lineItem()
+    {
+        return $this->belongsTo('App\InvoiceLineItem', 'invocie_id','id')->with('budget');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function paymentStatus()
     {
         return $this->hasOne('App\PaymentStatus', 'id','payment_status_id');
