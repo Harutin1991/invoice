@@ -54,7 +54,7 @@ class Invoice extends Model
      */
     public function invoiceType()
     {
-        return $this->hasOne('App\InvoiceType');
+        return $this->hasOne('App\InvoiceType', 'id','invoice_type_id');
     }
 
     /**
@@ -62,7 +62,7 @@ class Invoice extends Model
      */
     public function invoiceStatus()
     {
-        return $this->hasOne('App\InvoiceStatus');
+        return $this->hasOne('App\InvoiceStatus', 'id','invoice_status_id');
     }
 
 }
