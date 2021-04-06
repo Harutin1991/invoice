@@ -35,6 +35,7 @@ class InvoiceController extends Controller
         $errorMessage = '';
         $invoiceResponse = [];
         $pagesCount = 0;
+        $invoiceCount = 0;
         try {
             $limit = $request->get('limit') ? $request->get('limit') : $this->limit;
             $page = $request->get('page') ? $request->get('page') : $this->page;
@@ -42,7 +43,7 @@ class InvoiceController extends Controller
 
             $invoiceItems = Invoice::with('paymentStatus','paymentType','invoiceType','invoiceStatus')
                 ->where('invoice.school_year_id',self::$currentYearId)
-                ->join('school', 'school.id', '=', 'fund.school_id')
+                ->join('school', 'school.id', '=', 'invoice.school_id')
                 ->select('invoice.*','school.name as schoolName')
                 ->orderBy('school.name','asc')
                 ->skip($skip)->take($limit)
@@ -55,6 +56,27 @@ class InvoiceController extends Controller
             $success = false;
             $errorMessage = $e->getMessage();
         }
-        return response()->json(['schools' => $invoiceResponse,'totalCount'=>$invoiceCount, 'success' => $success, 'errorMessage' => $errorMessage, 'pagesCount' => $pagesCount]);
+        return response()->json(['items' => $invoiceResponse,'totalCount'=>$invoiceCount, 'success' => $success, 'errorMessage' => $errorMessage, 'pagesCount' => $pagesCount]);
+    }
+
+    public function getInvoiceItem($id)
+    {
+        $success = true;
+        $errorMessage = '';
+        $invoiceResponse = [];
+        try {
+
+            $invoiceItems = Invoice::with('paymentStatus', 'paymentType', 'invoiceType', 'invoiceStatus')
+                ->where('invoice.id', $id)
+                ->join('school', 'school.id', '=', 'invoice.school_id')
+                ->select('invoice.*', 'school.name as schoolName')
+                ->get();
+
+            $invoiceResponse = ResponseHelper::makeInvocieData($invoiceItems);
+        } catch (\Throwable $e) {
+            $success = false;
+            $errorMessage = $e->getMessage();
+        }
+        return response()->json(['item' => $invoiceResponse, 'success' => $success, 'errorMessage' => $errorMessage]);
     }
 }

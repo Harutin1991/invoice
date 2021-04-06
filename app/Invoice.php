@@ -35,6 +35,14 @@ class Invoice extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+    public function school()
+    {
+        return $this->hasOne('App\School', 'id','school_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function paymentType()
     {
         return $this->hasOne('App\PaymentType'); //, 'id','payment_type_id'
