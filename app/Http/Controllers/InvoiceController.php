@@ -33,7 +33,7 @@ class InvoiceController extends Controller
     {
         $success = true;
         $errorMessage = '';
-        $invocieResponse = [];
+        $invoiceResponse = [];
         $pagesCount = 0;
         try {
             $limit = $request->get('limit') ? $request->get('limit') : $this->limit;
@@ -48,13 +48,13 @@ class InvoiceController extends Controller
                 ->skip($skip)->take($limit)
                 ->get();
 
-            $invocieResponse = ResponseHelper::makeInvocieData($invoiceItems);
-            $schoolsCount = School::where('is_active', 1)->count();
-            $pagesCount = ceil($schoolsCount / $limit);
+            $invoiceResponse = ResponseHelper::makeInvocieData($invoiceItems);
+            $invoiceCount = Invoice::count();
+            $pagesCount = ceil($invoiceCount / $limit);
         } catch (\Throwable $e) {
             $success = false;
             $errorMessage = $e->getMessage();
         }
-        return response()->json(['schools' => $schoolsResponse, 'success' => $success, 'errorMessage' => $errorMessage, 'pagesCount' => $pagesCount]);
+        return response()->json(['schools' => $invoiceResponse,'totalCount'=>$invoiceCount, 'success' => $success, 'errorMessage' => $errorMessage, 'pagesCount' => $pagesCount]);
     }
 }
