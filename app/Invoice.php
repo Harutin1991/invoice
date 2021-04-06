@@ -30,7 +30,7 @@ class Invoice extends Model
      */
     public function lineItem()
     {
-        return $this->belongsTo('App\InvoiceLineItem', 'invocie_id','id')->with('budget');
+        return $this->hasOne('App\InvoiceLineItem', 'invoice_id','id')->with('budget');
     }
 
     /**

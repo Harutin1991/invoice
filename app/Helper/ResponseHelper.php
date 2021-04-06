@@ -41,6 +41,8 @@ class ResponseHelper
         $invoiceResponse = [];
         foreach ($invoices as $key => $invoice) {
             $invoiceResponse[$key] = $invoice;
+            $invoiceResponse[$key]['due_date'] = date('d/m/Y',strtotime($invoice->due_date));
+            $invoiceResponse[$key]['date'] = date('d/m/Y',strtotime($invoice->date));
         }
         return $invoiceResponse;
     }

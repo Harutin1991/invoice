@@ -121,7 +121,7 @@ class Budget extends Model
      */
     public function allocation()
     {
-        return $this->belongsTo('App\AllocationType', 'allocation_id');
+        return $this->belongsTo('App\AllocationType', 'allocation_type_id');
     }
 
     /**
