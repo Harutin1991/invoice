@@ -14,8 +14,12 @@ use Throwable;
 
 class InvoiceController extends Controller
 {
+    private $limit = 10;
+    private $page = 1;
     private static $currentYearId = NULL;
-    private static $currentTemplateId = 45;
+    private $schoolAllocation = null;
+    private $schoolId = null;
+    private static $allocationType = 1;
 
     /**
      * Create a new controller instance.
