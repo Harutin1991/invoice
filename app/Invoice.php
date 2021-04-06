@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     protected $table = 'invoice';
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -45,7 +46,7 @@ class Invoice extends Model
      */
     public function paymentType()
     {
-        return $this->hasOne('App\PaymentType'); //, 'id','payment_type_id'
+        return $this->hasOne('App\PaymentType', 'id','payment_type_id'); //, 'id','payment_type_id'
     }
 
     /**
