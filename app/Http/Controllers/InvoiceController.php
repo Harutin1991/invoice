@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 use App\Invoice;
 use App\SchoolYear;
+use App\InvoiceStatus;
+use App\InvoiceType;
+use App\PaymentStatus;
+use App\PaymentType;
 use App\Helper\ResponseHelper;
 use Illuminate\Http\Request;
 use Throwable;
@@ -77,5 +81,61 @@ class InvoiceController extends Controller
             $errorMessage = $e->getMessage();
         }
         return response()->json(['item' => $invoiceResponse, 'success' => $success, 'errorMessage' => $errorMessage]);
+    }
+
+    public function getInvoiceStatuses()
+    {
+        $success = true;
+        $errorMessage = '';
+        $invoiceStatus = [];
+        try {
+            $invoiceStatus = InvoiceStatus::all();
+        } catch (\Throwable $e) {
+            $success = false;
+            $errorMessage = $e->getMessage();
+        }
+        return response()->json(['invoiceStatus' => $invoiceStatus, 'success' => $success, 'errorMessage' => $errorMessage]);
+    }
+
+    public function getPaymentStatuses()
+    {
+        $success = true;
+        $errorMessage = '';
+        $paymentStatus = [];
+        try {
+            $paymentStatus = PaymentStatus::all();
+        } catch (\Throwable $e) {
+            $success = false;
+            $errorMessage = $e->getMessage();
+        }
+        return response()->json(['paymentStatus' => $paymentStatus, 'success' => $success, 'errorMessage' => $errorMessage]);
+    }
+
+    public function getInvoiceType()
+    {
+        $success = true;
+        $errorMessage = '';
+        $invoiceType = [];
+        try {
+            $invoiceType = InvoiceType::all();
+        } catch (\Throwable $e) {
+            $success = false;
+            $errorMessage = $e->getMessage();
+        }
+        return response()->json(['invoiceType' => $invoiceType, 'success' => $success, 'errorMessage' => $errorMessage]);
+    }
+
+    public function getPaymentType()
+    {
+        $success = true;
+        $errorMessage = '';
+        $paymentType = [];
+        try {
+            $paymentType = PaymentType::all();
+        } catch (\Throwable $e) {
+            $success = false;
+            $errorMessage = $e->getMessage();
+        }
+        return response()->json(['paymentType' => $paymentType, 'success' => $success, 'errorMessage' => $errorMessage]);
     }
 }

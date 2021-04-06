@@ -14,7 +14,7 @@ class Invoice extends Model
      * @var array
      */
     protected $fillable = [
-        'sea_id', 'lea_id', 'ses_id', 'id', 'name', 'description', 'number', 'note', 'date',
+        'sea_id', 'lea_id', 'ses_id', 'name', 'description', 'number', 'note', 'date',
         'invoice_term_id', 'due_date', 'created_at', 'created_by', 'school_year_id', 'school_id',
         'bill_to_id', 'ship_to_id', 'subtotal', 'markup_fee', 'markup_percentage', 'tax', 'shipping_fee',
         'total_amount', 'invoice_status_id', 'payment_status_id', 'payment_type_id', 'invoice_type_id'
