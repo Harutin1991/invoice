@@ -27,7 +27,7 @@ class InvoiceLineItem extends Model
      */
     public function budget()
     {
-        return $this->hasOne('App\Budget', 'id','item_id')->with('allocation');
+        return $this->hasMany('App\Budget', 'id','item_id')->with('allocation');
     }
 
 }
