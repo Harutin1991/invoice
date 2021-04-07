@@ -47,6 +47,22 @@ class ResponseHelper
         return $invoiceResponse;
     }
 
+    public static function makeBudgetData($budgetItems)
+    {
+        $activityResponse = [];
+        foreach ($budgetItems as $key => $activity) {
+            $activityResponse[$key] = $activity;
+            $activityResponse[$key]['total_cost'] = round($activity->unit_total_cost,2);
+            $activityResponse[$key]['cost'] = round($activity->unit_cost,2);
+
+            $activityResponse[$key]['start_date'] = ($activity->start_date) ? date('m-d-Y',strtotime($activity->start_date)) : null;
+            $activityResponse[$key]['end_date'] = ($activity->end_date) ? date('m-d-Y',strtotime($activity->end_date)) : null;
+            $activityResponse[$key]['completed_date'] = ($activity->completed_date) ? date('m-d-Y',strtotime($activity->completed_date)) : null;
+        }
+
+        return $activityResponse;
+    }
+
     public static function fail($msg, $code)
     {
         $response = array(

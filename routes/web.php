@@ -12,4 +12,8 @@ $router->group(['prefix'=>'api/v1'], function() use($router){
     $router->get('/payment-status', 'InvoiceController@getPaymentStatuses');
     $router->get('/payment-type', 'InvoiceController@getPaymentType');
     $router->get('/invoice-type', 'InvoiceController@getInvoiceType');
+    $router->get('/invoice-term', 'InvoiceController@getTerms');
+    $router->get('/get-budget-list/{allocationType}', 'InvoiceController@getBudgetList');
+
+    $router->post('/add-invoice/{allocationType}', 'InvoiceController@addInvoice');
 });
