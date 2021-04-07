@@ -48,6 +48,14 @@ class Invoice extends Model
     {
         return $this->hasOne('App\FundSource', 'id','fund_source_id');
     }
+    
+        /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function invoiceTerm()
+    {
+        return $this->hasOne('App\InvoiceTerm', 'id','invoice_term_id');
+    }
 
 
     /**

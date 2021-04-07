@@ -46,7 +46,7 @@ class InvoiceController extends Controller
             $page = $request->get('page') ? $request->get('page') : $this->page;
             $skip = (!$page) ? 0 : ($page - 1) * $limit;
 
-            $invoiceItems = Invoice::with('paymentStatus', 'paymentType', 'invoiceType', 'invoiceStatus', 'lineItem', 'allocation', 'fundSource')
+            $invoiceItems = Invoice::with('paymentStatus', 'paymentType', 'invoiceType','invoiceTerm', 'invoiceStatus', 'lineItem', 'allocation', 'fundSource')
                 ->where('invoice.school_year_id', self::$currentYearId)
                 ->join('school', 'school.id', '=', 'invoice.school_id')
                 ->select('invoice.*', 'school.name as schoolName')
@@ -71,7 +71,7 @@ class InvoiceController extends Controller
         $invoiceResponse = [];
         try {
 
-            $invoiceItems = Invoice::with('paymentStatus', 'paymentType', 'invoiceType', 'invoiceStatus', 'lineItem', 'allocation', 'fundSource')
+            $invoiceItems = Invoice::with('paymentStatus', 'paymentType', 'invoiceType','invoiceTerm', 'invoiceStatus', 'lineItem', 'allocation', 'fundSource')
                 ->where('invoice.id', $id)
                 ->join('school', 'school.id', '=', 'invoice.school_id')
                 ->select('invoice.*', 'school.name as schoolName')
@@ -168,18 +168,21 @@ class InvoiceController extends Controller
 
             $startDate = $request->get('start_date') ? $request->get('start_date') : null;
             $endDate = $request->get('end_date') ? $request->get('end_date') : null;
-
-            $budgetItems = Budget::with('category', 'subCategory', 'school', 'supplier', 'status', 'details', 'fundSource', 'fund')->
-            where('allocation_type_id', $allocationType)->where('budget.details.is_invoiced', 1);
+            
+            $budgetItems = Budget::query()->with('category', 'subCategory', 'school')->
+            where('allocation_type_id', $allocationType)->where('details.is_invoiced', 1)
+             ->join('budget_item_detail as details', 'details.item_id', '=', 'budget_item.id');
+              
             if ($startDate) {
-                $budgetItems->where('budget.start_date', $startDate);
+                $budgetItems->where('budget_item.start_date', $startDate);
             }
             if ($endDate) {
-                $budgetItems->where('budget.end_date', $endDate);
+                $budgetItems->where('budget_item.end_date', $endDate);
             }
-            $budgetItems->skip($skip)->take($limit)->orderBy('start_date', 'DESC')->get();
-            $itemsResponse = ResponseHelper::makeBudgetData($budgetItems);
-            $pagesCount = ceil(count($budgetItems) / $limit);
+            
+            $budgetResponse = $budgetItems->skip($skip)->take($limit)->orderBy('budget_item.start_date', 'DESC')->get();
+            $itemsResponse = ResponseHelper::makeBudgetData($budgetResponse);
+            $pagesCount = ceil($budgetItems->count() / $limit);
 
         } catch (Throwable $e) {
             $success = false;
@@ -196,6 +199,9 @@ class InvoiceController extends Controller
         $pagesCount = 0;
         try {
             $budgetIds = $request->get('budgetIds');
+            if(!is_array($budgetIds)) {
+                $budgetIds = [$budgetIds];
+            }
             $budgets = Budget::whereIn('id', $budgetIds)->get();
             foreach ($budgets as $activity) {
                 $invoiceData = [
